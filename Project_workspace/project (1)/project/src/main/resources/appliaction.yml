@@ -1,0 +1,77 @@
+spring:
+  application:
+    name: ProjectManagement
+
+  datasource:
+    url: jjdbc:postgreSql://localhost:3306/project_mangement  # Replace with your database URL
+    username: postgreSql                            # Replace with your database username
+    password: 1234                           # Replace with your database password
+    driver-class-name: org. postgresql. Driver           # Adjust if using a different database
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+resilience4j:
+  circuitBreaker:
+    instances:
+      addManagerbreaker:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 6000
+        eventConsumerBufferSize: 10
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+      createProjectbreaker:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 6000
+        eventConsumerBufferSize: 10
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+      getAllProject_breaker:
+        registerHealthIndicator: true
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        permittedNumberOfCallsInHalfOpenState: 3
+        waitDurationInOpenState: 6000
+        eventConsumerBufferSize: 10
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+  retry:
+    instances:
+      addManagerRetry:
+        maxAttempts: 3
+        backoff:
+          delay: 1000
+      createProjectRetry:
+        maxAttempts: 3
+        backoff:
+          delay: 1000
+      getAllProjectRetry:
+        maxAttempts: 3
+        backoff:
+          delay: 1000
+  ratelimiter:
+    instances:
+      ManagerRateLimiter:
+        limit-refresh-period: 4s
+        limit-for-period: 2
+        timeout-duration: 2s
+      projectRateLimiter:
+        limit-refresh-period: 4s
+        limit-for-period: 2
+        timeout-duration: 2s

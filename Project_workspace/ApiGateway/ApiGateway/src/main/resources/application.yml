@@ -1,0 +1,22 @@
+
+server:
+  port: 3030
+spring:
+  application:
+    name: API-GATEWAY
+
+  cloud:
+    gateway:
+      routes:
+        - id: project
+          uri: lb://project
+          predicates:
+            - Path=/api/**,/api/emp/**
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka
